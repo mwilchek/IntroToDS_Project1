@@ -1,0 +1,135 @@
+---
+title: "Heights of Parents and Children Classified by Gender"
+author: "Matt Wilchek & Amelia Kelly"
+date: "March 3, 2017"
+output:
+  ioslides_presentation:
+    widescreen: true
+    transition: slower
+    smaller: true
+runtime: shiny
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2) # for graphing
+library(lattice) # for graphing
+library(car) # for grpahing
+PearsonLeeData <- read.csv(url("https://raw.githubusercontent.com/mwilchek/IntroToDS_Project1/master/NewPearsonLeeData.csv"))
+PearsonLee <- data.frame(PearsonLeeData)
+child <- (PearsonLee$child)
+parent<- (PearsonLee$parent)
+```
+
+## Overview
+- Goal
+- Background of Dataset
+- Research/Background
+- Epicycles of Analysis
+- Problem Definition (SMART)
+- Initial Exploration (Variable Meanings)
+- Initial Exploration (Descriptive Statistics)
+- Coding Standards (Comments)
+- Results/Interpretations
+- Conclusions and Next Steps
+
+## Goal (About)
+
+This R Markdown presentation is made to be interactive using a library called 'Shiny'. The viewers of the presentation can change the assumptions underlying what's presented and see the results immediately from their own web browser or by running this R Markdown file. 
+
+About using Shing see: [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
+
+## Interactive Plot (Example)
+
+```{r eruptions}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+## Initial Exploration (Variable Meanings)
+
+- Child: child height in inches, a numeric vector
+- Parent: parent height in inches, a numeric vector
+- Frequency: a numeric vector
+- GP: a factor with levels fd fs md ms
+- Par: a factor with levels Father Mother
+- Chl: a factor with levels Daughter Son
+```{r echo=FALSE}
+str(PearsonLee)
+```
+
+## Initial Exploration (Descriptive Statistics)
+
+```{r echo=FALSE}
+summary(PearsonLee)
+```
+
+## Histograms of Children's and Parent's Heights
+
+```{r echo=FALSE}
+par(mfrow=c(1,2))
+hist(child,
+# freq = NULL, probability = !freq,
+# include.lowest = TRUE, right = TRUE,
+# density = NULL, angle = 45, col = NULL, border = NULL,
+main = paste("Histogram of Children's Heights"),
+# xlim = range(breaks), ylim = NULL,
+xlab = "Children's Heights", col="darkgreen",
+axes = TRUE, plot = TRUE)
+
+hist(parent,
+# freq = NULL, probability = !freq,
+# include.lowest = TRUE, right = TRUE,
+# density = NULL, angle = 45, col = NULL, border = NULL,
+main = paste("Histogram of Parent's Heights"),
+# xlim = range(breaks), ylim = NULL,
+xlab = "Parent's Heights", col="blue",
+axes = TRUE, plot = TRUE)
+```
+
+## Scatterplot of Children's and Parent's Heights
+
+```{r echo=FALSE}
+par(mfrow=c(1,2))
+plot(parent, child, main="Scatterplot Example",
+   xlab="Child Height ", ylab="Parent Height ", pch=19)
+
+with(PearsonLee, 
+    {
+    lim <- c(55,80)
+    xv <- seq(55,80, .5)
+    sunflowerplot(parent,child, number=frequency, xlim=lim, ylim=lim, seg.col="gray", size=.1, main="Sunflowerplot Example", xlab="Child Height", ylab="Parent Height")
+    abline(lm(child ~ parent, weights=frequency), col="blue", lwd=2)
+    lines(xv, predict(loess(child ~ parent, weights=frequency), data.frame(parent=xv)), 
+          col="blue", lwd=2)
+    if(require(car)) {
+    dataEllipse(parent,child, xlim=lim, ylim=lim, plot.points=FALSE)
+        }
+  })
+```
+
+Through the scatterplots we can see where the concentration of observations lie and the trend of the dataset.
+
+## Box Plots of Child Height vs. Parent Height
+
+```{r echo=FALSE}
+par(mfrow=c(1,2.5))
+
+boxplot(child~parent, data=PearsonLee, main="Boxplot of Parent to \nChildren's Height",
+xlab="Parent", ylab="Children's Height", col=c('powderblue','mistyrose'))
+
+boxplot(parent~child, data=PearsonLee, main="Boxplot of Children to \nParent's Height",
+xlab="Children", ylab="Parent's Height", col=c('mistyrose','powderblue'))
+```
