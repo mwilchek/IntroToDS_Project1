@@ -13,11 +13,22 @@ runtime: shiny
 knitr::opts_chunk$set(echo = FALSE)
 library(ggplot2) # for graphing
 library(lattice) # for graphing
-library(car) # for grpahing
-PearsonLeeData <- read.csv(url("https://raw.githubusercontent.com/mwilchek/IntroToDS_Project1/master/NewPearsonLeeData.csv"))
+library(car) # for graphing
+library(memisc)
+library(HistData)
+library(png)
+library(grid)
+PearsonLeeData <- (HistData::PearsonLee) 
 PearsonLee <- data.frame(PearsonLeeData)
 child <- (PearsonLee$child)
 parent<- (PearsonLee$parent)
+PearsonLee$group <- as.factor(cases(
+PearsonLee$gp == 'fs' -> 0,
+PearsonLee$gp == 'md' -> 0,
+PearsonLee$gp == 'fd' -> 1,
+PearsonLee$gp == 'ms' -> 1
+))
+PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 ```
 
 ## Overview
@@ -34,28 +45,31 @@ parent<- (PearsonLee$parent)
 
 ## Goal (About)
 
-This R Markdown presentation is made to be interactive using a library called 'Shiny'. The viewers of the presentation can change the assumptions underlying what's presented and see the results immediately from their own web browser or by running this R Markdown file. 
+- Investigate relationship of parent/child height distributions based on gender using the PearsonLee dataset from HIstData in R
 
-About using Shing see: [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
+## Research/Background
 
-## Interactive Plot (Example)
+## Epicycles of Analysis
+Show picture here.
+```{r echo=FALSE}
+# destfile <- url("https://quantartist.files.wordpress.com/2016/05/epicycles-of-analysis.png?w=675&h=773")
+# appimg <- readPNG(destfile)
+# grid.raster(appimg)
+```
+## Problem Definition (SMART)
 
-```{r eruptions}
-inputPanel(
-  selectInput("n_breaks", label = "Number of bins:",
-              choices = c(10, 20, 35, 50), selected = 20),
-  
-  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
-              min = 0.2, max = 2, value = 1, step = 0.2)
-)
+Do the means of the average of parent and children heights differ when parent and child have different gender?
+- Specific: Are the means of the averages of Parent/Child Heights equal?
+- Measurable: We can the take means
+- Achievable: Can compare values via t test
+- Relevant: Useful for researchers looking at relationship between height and gender
+- Time-Scaled: Multiple data sets exist, so question can be answered in a timely manner
 
-renderPlot({
-  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
-       xlab = "Duration (minutes)", main = "Geyser eruption duration")
-  
-  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
-  lines(dens, col = "blue")
-})
+## Initial Exploration (Descriptive Statistics)
+Initial summary of the PearsonLee dataset:
+
+```{r echo=FALSE}
+summary(PearsonLee)
 ```
 
 ## Initial Exploration (Variable Meanings)
@@ -69,67 +83,62 @@ renderPlot({
 ```{r echo=FALSE}
 str(PearsonLee)
 ```
-
-## Initial Exploration (Descriptive Statistics)
-
+## Scatterplot of Children's and Parent's Heights 
+## (High Level View)
+By using scatterplots we can see a high level view for the distribution of all the data points, but from this we can see that we will need to categorize some of the data to answer our question.
 ```{r echo=FALSE}
-summary(PearsonLee)
+require(lattice)
+xyplot(child ~ parent|par+chl, data=PearsonLee, type=c("p", "r", "smooth"), col.line="red")
 ```
 
-## Histograms of Children's and Parent's Heights
+## Child Height Distribution {.smaller}
 
 ```{r echo=FALSE}
-par(mfrow=c(1,2))
-hist(child,
-# freq = NULL, probability = !freq,
-# include.lowest = TRUE, right = TRUE,
-# density = NULL, angle = 45, col = NULL, border = NULL,
-main = paste("Histogram of Children's Heights"),
-# xlim = range(breaks), ylim = NULL,
-xlab = "Children's Heights", col="darkgreen",
-axes = TRUE, plot = TRUE)
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20)
+)
 
-hist(parent,
-# freq = NULL, probability = !freq,
-# include.lowest = TRUE, right = TRUE,
-# density = NULL, angle = 45, col = NULL, border = NULL,
-main = paste("Histogram of Parent's Heights"),
-# xlim = range(breaks), ylim = NULL,
-xlab = "Parent's Heights", col="blue",
-axes = TRUE, plot = TRUE)
+renderPlot({hist(child, probability = FALSE, breaks = as.numeric(input$n_breaks),
+            xlab = "Children's Heights", main = "Histogram of Children's Heights", col="deepskyblue", plot = TRUE)
+            abline(v=mean(parent), col="royalblue")
+          })
+
 ```
 
-## Scatterplot of Children's and Parent's Heights
+## Parent Height Distribution {.smaller}
 
 ```{r echo=FALSE}
-par(mfrow=c(1,2))
-plot(parent, child, main="Scatterplot Example",
-   xlab="Child Height ", ylab="Parent Height ", pch=19)
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20)
+)
 
-with(PearsonLee, 
-    {
-    lim <- c(55,80)
-    xv <- seq(55,80, .5)
-    sunflowerplot(parent,child, number=frequency, xlim=lim, ylim=lim, seg.col="gray", size=.1, main="Sunflowerplot Example", xlab="Child Height", ylab="Parent Height")
-    abline(lm(child ~ parent, weights=frequency), col="blue", lwd=2)
-    lines(xv, predict(loess(child ~ parent, weights=frequency), data.frame(parent=xv)), 
-          col="blue", lwd=2)
-    if(require(car)) {
-    dataEllipse(parent,child, xlim=lim, ylim=lim, plot.points=FALSE)
-        }
-  })
+renderPlot({hist(parent, probability = FALSE, breaks = as.numeric(input$n_breaks),
+            xlab = "Parent's Heights", main = "Histogram of Parent's Heights", col="deepskyblue", plot = TRUE)
+            abline(v=mean(parent), col="royalblue")
+         })
 ```
 
 Through the scatterplots we can see where the concentration of observations lie and the trend of the dataset.
 
-## Box Plots of Child Height vs. Parent Height
+## Box Plot Representation of Heights for Father, Son, Mother & Daughter \n(Diving Deep)
 
 ```{r echo=FALSE}
-par(mfrow=c(1,2.5))
+par(mfrow=c(1,2))
+boxplot(child~chl, data=PearsonLee, main="Boxplot of Children's Height",
+xlab="Children", ylab="Children's Height", col=c('powderblue','mistyrose'))
 
-boxplot(child~parent, data=PearsonLee, main="Boxplot of Parent to \nChildren's Height",
-xlab="Parent", ylab="Children's Height", col=c('powderblue','mistyrose'))
+boxplot(parent~par, data=PearsonLee, main="Boxplot of Parent's Height",
+xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
+```
 
-boxplot(parent~child, data=PearsonLee, main="Boxplot of Children to \nParent's Height",
-xlab="Children", ylab="Parent's Height", col=c('mistyrose','powderblue'))
+## Taking a t.test
+
+```{r echo=FALSE}
+# plot(PearsonLee$gp,PearsonLee$avg)
+boxplot(avg~group, data=PearsonLee, main="Boxplot of Average Heights by Group",
+xlab="Group", ylab="Height", col = c('magenta','turquoise'))
+
+t.test(PearsonLee$avg~PearsonLee$group) 
 ```
