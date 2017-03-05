@@ -1,7 +1,7 @@
 ---
 title: "Heights of Parents and Children Classified by Gender"
 author: "Matt Wilchek & Amelia Kelly"
-date: "March 3, 2017"
+date: "March 7, 2017"
 output:
   ioslides_presentation:
     widescreen: true
@@ -42,6 +42,9 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 - Coding Standards (Comments)
 - Results/Interpretations
 - Conclusions and Next Steps
+```{rcpp}
+
+```
 
 ## Goal (About)
 
@@ -50,15 +53,11 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 ## Research/Background
 
 ## Epicycles of Analysis
-Show picture here.
-```{r echo=FALSE}
-# destfile <- url("https://quantartist.files.wordpress.com/2016/05/epicycles-of-analysis.png?w=675&h=773")
-# appimg <- readPNG(destfile)
-# grid.raster(appimg)
-```
-## Problem Definition (SMART)
+![Imgur](http://i.imgur.com/ygA3oT3.png)
 
+## Problem Definition (SMART)
 Do the means of the average of parent and children heights differ when parent and child have different gender?
+
 - Specific: Are the means of the averages of Parent/Child Heights equal?
 - Measurable: We can the take means
 - Achievable: Can compare values via t test
@@ -73,7 +72,6 @@ summary(PearsonLee)
 ```
 
 ## Initial Exploration (Variable Meanings)
-
 - Child: child height in inches, a numeric vector
 - Parent: parent height in inches, a numeric vector
 - Frequency: a numeric vector
@@ -136,9 +134,9 @@ xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
 ## Taking a t.test
 
 ```{r echo=FALSE}
+t.test(PearsonLee$avg~PearsonLee$group) 
+layout(matrix(c(1,2,2,3), 2, 2, byrow = TRUE), heights=c(2,1))
 # plot(PearsonLee$gp,PearsonLee$avg)
 boxplot(avg~group, data=PearsonLee, main="Boxplot of Average Heights by Group",
 xlab="Group", ylab="Height", col = c('magenta','turquoise'))
-
-t.test(PearsonLee$avg~PearsonLee$group) 
 ```
