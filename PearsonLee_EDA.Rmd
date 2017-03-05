@@ -16,7 +16,6 @@ library(lattice) # for graphing
 library(car) # for graphing
 library(memisc)
 library(HistData)
-library(png)
 library(grid)
 PearsonLeeData <- (HistData::PearsonLee) 
 PearsonLee <- data.frame(PearsonLeeData)
