@@ -1,7 +1,7 @@
 ---
 title: "Heights of Parents and Children Classified by Gender"
-author: "Matt Wilchek & Amelia Kelly"
-date: "March 7, 2017"
+author: "Amelia Kelly & Matt Wilchek"
+date: "March 6, 2017"
 output:
   ioslides_presentation:
     widescreen: true
@@ -22,6 +22,8 @@ library(grid) # for graphing
 # Call data set
 PearsonLeeData <- (HistData::PearsonLee) 
 PearsonLee <- data.frame(PearsonLeeData)
+
+# Create variables for ease of use
 child <- (PearsonLee$child)
 parent<- (PearsonLee$parent)
 
@@ -45,33 +47,36 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 - Problem Definition (SMART)
 - Initial Exploration (Variable Meanings)
 - Initial Exploration (Descriptive Statistics)
-- Coding Standards (Comments)
+- Initial Exploration (Histograms)
+- Initial Exploration (Scatterplots)
+- Initial Exploration (Boxplots)
 - Results/Interpretations
 - Conclusions and Next Steps
-```{rcpp}
-
-```
 
 ## Goal (About)
 
 - Investigate relationship of parent/child height distributions based on gender using the PearsonLee dataset from HistData in R
 
 ## Research/Background
+- Pearson and Lee’s 1896 data on the heights of parents and children classified by gender
 
 ## Epicycles of Analysis
-- State
-- Explore
-- Build
-- Interpret
-- Communicate
+Core Activities of Data Analysis
+
+- State and refine question
+- Explore data
+- Build statistical models
+- Interpret results
+- Communicate results
 
 ![Imgur](http://i.imgur.com/ygA3oT3.png)
 
 
-## Problem Definition (SMART)
+
+
 ## Problem Definition (SMART)
 
-Do the means of the average of parent and children heights differ when parent and child have different gender?
+Question: Do the means of the average of parent and children heights differ when parent and child differ by gender?
 
 - Specific: Are the means of the averages of Parent/Child Heights equal?
 - Measurable: We can the take means
@@ -80,6 +85,8 @@ Do the means of the average of parent and children heights differ when parent an
 - Time-Scaled: Multiple data sets exist, so question can be answered in a timely manner
 
 ## Initial Exploration (Variable Meanings)
+A frequency data frame with 746 observations on the following 6 variables:
+
 - Child: child height in inches, a numeric vector
 - Parent: parent height in inches, a numeric vector
 - Frequency: a numeric vector
@@ -88,6 +95,7 @@ Do the means of the average of parent and children heights differ when parent an
 - Chl: a factor with levels Daughter Son
 
 ```{r echo=FALSE}
+# Get structure of PearsonLee
 str(PearsonLee)
 ```
 
@@ -99,53 +107,60 @@ Initial summary of the PearsonLee dataset:
 summary(PearsonLee)
 ```
 
+## Initial Exploration (Scatterplots)
+Scatterplots of Children's and Parent's Heights by Gender
 
-## Scatterplot of Children's and Parent's Heights 
-## (High Level View)
-By using scatterplots we can see a high level view for the distribution of all the data points, but from this we can see that we will need to categorize some of the data to answer our question.
 ```{r echo=FALSE}
+# Combined scatterplots of children and parent heights
 require(lattice)
 xyplot(child ~ parent|par+chl, data=PearsonLee, type=c("p", "r", "smooth"), col.line="red")
 ```
 
-## Child Height Distribution {.smaller}
+## Initial Exploration (Histograms)
+Histogram of Children Heights
 
 ```{r echo=FALSE}
+# Include input for selection of bin numbers:
 inputPanel(
   selectInput("n_breaks", label = "Number of bins:",
               choices = c(10, 20, 35, 50), selected = 20)
 )
 
-renderPlot({hist(child, probability = FALSE, breaks = as.numeric(input$n_breaks),
+# Create histogram of children heights
+renderPlot({h<-hist(child, probability = FALSE, breaks = as.numeric(input$n_breaks),
             xlab = "Children's Heights", main = "Histogram of Children's Heights", col="deepskyblue", plot = TRUE)
-            abline(v=mean(parent), col="royalblue")
           })
 
 ```
 
-## Parent Height Distribution {.smaller}
+## Initial Exploration (Histograms) {.smaller}
+Histogram of Parent Heights 
 
 ```{r echo=FALSE}
+# Include input for selection of bin numbers:
 inputPanel(
   selectInput("n_breaks", label = "Number of bins:",
               choices = c(10, 20, 35, 50), selected = 20)
 )
 
+# Create histogram of parent heights
 renderPlot({hist(parent, probability = FALSE, breaks = as.numeric(input$n_breaks),
             xlab = "Parent's Heights", main = "Histogram of Parent's Heights", col="deepskyblue", plot = TRUE)
-            abline(v=mean(parent), col="royalblue")
+
          })
 ```
 
-Through the scatterplots we can see where the concentration of observations lie and the trend of the dataset.
 
-## Box Plot Representation of Heights for Father, Son, Mother & Daughter \n(Diving Deep)
-
+## Initial Exploration (Boxplots)
+Boxplot of Children and Parent Heights 
 ```{r echo=FALSE}
+
+# Boxplot of children's heights by gender
 par(mfrow=c(1,2))
 boxplot(child~chl, data=PearsonLee, main="Boxplot of Children's Height",
 xlab="Children", ylab="Children's Height", col=c('powderblue','mistyrose'))
 
+# Boxplot of parent's heights by gender
 boxplot(parent~par, data=PearsonLee, main="Boxplot of Parent's Height",
 xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
 ```
@@ -153,9 +168,12 @@ xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
 ## Taking a t.test
 
 ```{r echo=FALSE}
+# Boxplot of average of child and parent heights by group
+boxplot(avg~group, data=PearsonLee, main="Boxplot of Average Heights by Group",
+xlab="Group", ylab="Height", col = c('grey79','grey37'))
+
+# Take t test to test whether the means of the different groups are equal.
 t.test(PearsonLee$avg~PearsonLee$group) 
 layout(matrix(c(1,2,2,3), 2, 2, byrow = TRUE), heights=c(2,1))
-# plot(PearsonLee$gp,PearsonLee$avg)
-boxplot(avg~group, data=PearsonLee, main="Boxplot of Average Heights by Group",
-xlab="Group", ylab="Height", col = c('magenta','turquoise'))
 ```
+
