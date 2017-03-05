@@ -77,6 +77,14 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 <li>Interpret results</li>
 <li>Communicate results</li>
 </ul></p>
+<p>Our Process...</p>
+<p>State:
+<ul>
+<li><b>Develop Expectations:</b> There is a difference between measures of heights by gender</li>
+<li><b>Collect Data:</b> PearsonLee</li>
+<li><b>Matched Expectations:</b> Yes</li>
+</ul>
+</p>
 </div>
 
 ## Problem Definition (SMART)
@@ -188,7 +196,7 @@ xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
 <li>Alternative Hypothesis: The means of the average heights for the 2 groups are <u>not</u> equal</li>
 </ul>
 
-## Taking a t.test
+## Taking a t.test (Results/Interpretations)
 
 ```{r echo=FALSE}
 layout(matrix(c(1,2,2,3), 2, 2, byrow = TRUE), heights=c(2,1))
@@ -204,3 +212,5 @@ xlab="Group", ylab="Height", col = c('grey79','grey37'))
 # The means of the average of parent and children heights DO differ when parent and child differ by gender based on our analysis. 
 ```
 
+## Conclusions and Next Steps
+Issues we had listed here...
