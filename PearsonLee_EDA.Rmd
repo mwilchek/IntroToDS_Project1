@@ -11,22 +11,29 @@ runtime: shiny
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+# Install necessary packages and include packages.
 library(ggplot2) # for graphing
 library(lattice) # for graphing
 library(car) # for graphing
-library(memisc)
-library(HistData)
-library(grid)
+library(memisc) # for function case
+library(HistData) # library containing data
+library(grid) # for graphing
+
+# Call data set
 PearsonLeeData <- (HistData::PearsonLee) 
 PearsonLee <- data.frame(PearsonLeeData)
 child <- (PearsonLee$child)
 parent<- (PearsonLee$parent)
+
+# Create column variable as factor for gender
 PearsonLee$group <- as.factor(cases(
 PearsonLee$gp == 'fs' -> 0,
 PearsonLee$gp == 'md' -> 0,
 PearsonLee$gp == 'fd' -> 1,
 PearsonLee$gp == 'ms' -> 1
 ))
+
+# Create column variable as average of height columns
 PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 ```
 
@@ -41,20 +48,26 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 - Coding Standards (Comments)
 - Results/Interpretations
 - Conclusions and Next Steps
-```{rcpp}
-
-```
 
 ## Goal (About)
 
-- Investigate relationship of parent/child height distributions based on gender using the PearsonLee dataset from HIstData in R
+- Investigate relationship of parent/child height distributions based on gender using the PearsonLee dataset from HistData in R
 
 ## Research/Background
 
 ## Epicycles of Analysis
-![Imgur](http://i.imgur.com/ygA3oT3.png)
+<div><p style="float: right;"><img src='https://raw.githubusercontent.com/mwilchek/IntroToDS_Project1/master/Epicycles.jpg' width="300 height="150  border="1px"></p>
+<p><ul>
+<li>State and refine question</li>
+<li>Explore data</li>
+<li>Build statistical models</li>
+<li>Interpret results</li>
+<li>Communicate results</li>
+</ul></p>
+</div>
 
 ## Problem Definition (SMART)
+
 Do the means of the average of parent and children heights differ when parent and child have different gender?
 
 - Specific: Are the means of the averages of Parent/Child Heights equal?
@@ -63,13 +76,6 @@ Do the means of the average of parent and children heights differ when parent an
 - Relevant: Useful for researchers looking at relationship between height and gender
 - Time-Scaled: Multiple data sets exist, so question can be answered in a timely manner
 
-## Initial Exploration (Descriptive Statistics)
-Initial summary of the PearsonLee dataset:
-
-```{r echo=FALSE}
-summary(PearsonLee)
-```
-
 ## Initial Exploration (Variable Meanings)
 - Child: child height in inches, a numeric vector
 - Parent: parent height in inches, a numeric vector
@@ -77,9 +83,20 @@ summary(PearsonLee)
 - GP: a factor with levels fd fs md ms
 - Par: a factor with levels Father Mother
 - Chl: a factor with levels Daughter Son
+
 ```{r echo=FALSE}
 str(PearsonLee)
 ```
+
+## Initial Exploration (Descriptive Statistics)
+Initial summary of the PearsonLee dataset:
+
+```{r echo=FALSE}
+# Get summary of PearsonLee.
+summary(PearsonLee)
+```
+
+
 ## Scatterplot of Children's and Parent's Heights 
 ## (High Level View)
 By using scatterplots we can see a high level view for the distribution of all the data points, but from this we can see that we will need to categorize some of the data to answer our question.
@@ -139,3 +156,4 @@ layout(matrix(c(1,2,2,3), 2, 2, byrow = TRUE), heights=c(2,1))
 boxplot(avg~group, data=PearsonLee, main="Boxplot of Average Heights by Group",
 xlab="Group", ylab="Height", col = c('magenta','turquoise'))
 ```
+>>>>>>> eb8175e348f000323f3c7f499e07cfff8c25036e
