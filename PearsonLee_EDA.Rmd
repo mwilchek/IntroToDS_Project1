@@ -1,15 +1,19 @@
 ---
 title: "Heights of Parents and Children Classified by Gender"
-subtitle: 'An Exploratory Data Analysis'
 author: "Amelia Kelly & Matt Wilchek"
 date: "March 6, 2017"
 output:
   ioslides_presentation:
     css: bulma.css
-    widescreen: true
+    smaller: yes
     transition: slower
-    smaller: true
+    widescreen: yes
 runtime: shiny
+subtitle: An Exploratory Data Analysis
+resource_files:
+- Epicycles.jpg
+- Karl_Pearson.jpg
+- Refs.jpg
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
