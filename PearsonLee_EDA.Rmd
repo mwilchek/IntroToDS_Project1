@@ -128,7 +128,7 @@ Overview of how heights for child and parent disperse around each respective mea
 measures <- c(mean(child), var(child), sd(child), mean(parent),var(parent), sd(parent))
 names(measures) <- c("Child Mean","Child Var", "Child SD", "Parent Mean", "Parent Var", "Parent SD")
 measures
-# Based on the measures above we can see measures for child and parent are relatively close, with 
+# Based on the results above we can see the measures for child and parent are relatively close. 
 ```
 
 ## Initial Exploration (Scatterplots)
@@ -138,7 +138,7 @@ Scatterplots of Child and Parent Heights by Gender
 # Combined scatterplots of children and parent heights
 # The purpose for doing this scatter plot was to initially look at the distribution between child and parent heights by gender. Also to check if the distribution of the data was a linear relationship or not.
 require(lattice)
-xyplot(child ~ parent|par+chl, data=PearsonLee, type=c("p", "r", "smooth"), col.line="red")
+xyplot(child ~ parent|par+chl, data=PearsonLee)
 ```
 
 ## Initial Exploration (Histograms)
@@ -218,7 +218,14 @@ xlab="Group", ylab="Height", col = c('grey79','grey37'))
 ```
 
 ## Conclusions and Next Steps
-Issues we had listed here...
+<p> Looking from the 95 percent confidence interval, a t value of -0.834 is p = 0.4.</p>
+<p> We reject the null hypothesis at a <i>alpha = 0.05</i> level.</p>
+<p></p>
+<p></p>
+<p align="center"><b><i>Statistically, the means of the two groups are not the same. However, from an objective point, a person would not be able to perceive the difference between a person of height 65.4 inches and another of height 65.65 inches.</b></i></p>
+<p></p>
+<p></p>
+<p>For future next steps with this dataset it may be interesting to see </p>
 
 ## References
 Picture of references goes here...
