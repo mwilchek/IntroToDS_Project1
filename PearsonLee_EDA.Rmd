@@ -1,9 +1,11 @@
 ---
 title: "Heights of Parents and Children Classified by Gender"
+subtitle: 'An Exploratory Data Analysis'
 author: "Amelia Kelly & Matt Wilchek"
 date: "March 6, 2017"
 output:
   ioslides_presentation:
+    font-family: Centruy Gothic
     widescreen: true
     transition: slower
     smaller: true
@@ -225,7 +227,7 @@ xlab="Group", ylab="Height", col = c('grey79','grey37'))
 <p align="center"><b><i>Statistically, the means of the two groups are not the same. However, from an objective point, a person would not be able to perceive the difference between a person of height 65.4 inches and another of height 65.65 inches.</b></i></p>
 <p></p>
 <p></p>
-<p>For future next steps with this dataset it may be interesting to see </p>
+<p>For future next steps with this dataset it may be interesting if We consider further stratifying the data to look for differences among different height groups.</p>
 
 ## References
-Picture of references goes here...
+<div><p style="float: center;"><img src='https://raw.githubusercontent.com/mwilchek/IntroToDS_Project1/master/Refs.jpg' width="516px", height="467px"></p></div>
