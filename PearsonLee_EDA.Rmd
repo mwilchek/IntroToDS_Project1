@@ -47,11 +47,12 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 - Problem Definition (SMART)
 - Initial Exploration (Variable Meanings)
 - Initial Exploration (Descriptive Statistics)
-- Initial Exploration (Histograms)
 - Initial Exploration (Scatterplots)
+- Initial Exploration (Histograms)
 - Initial Exploration (Boxplots)
-- Results/Interpretations
+- Results/Interpretations (t test)
 - Conclusions and Next Steps
+- References
 
 ## Goal (About)
 
@@ -120,17 +121,18 @@ Initial summary of the PearsonLee dataset:
 summary(PearsonLee)
 ```
 
-## Initial Exploration (Vairance and SD) {.smaller}
-Overview of how the data for child and parent hights disperse around each respective mean
+## Initial Exploration (Variance and SD) {.smaller}
+Overview of how heights for child and parent disperse around each respective mean
 ```{r echo=TRUE}
-measures <- c(var(child), sd(child), var(parent), sd(parent))
-names(measures) <- c("Chld Var", "Chld SD", "Parent Var", "Parent SD")
+# Take mean, variance, and standard deviation for variables of interest.
+measures <- c(mean(child), var(child), sd(child), mean(parent),var(parent), sd(parent))
+names(measures) <- c("Child Mean","Child Var", "Child SD", "Parent Mean", "Parent Var", "Parent SD")
 measures
-# Based on the measures above we can see the dispersion around each respective mean is fairly significant
+# Based on the measures above we can see measures for child and parent are relatively close, with 
 ```
 
 ## Initial Exploration (Scatterplots)
-Scatterplots of Children's and Parent's Heights by Gender
+Scatterplots of Child and Parent Heights by Gender
 
 ```{r echo=FALSE}
 # Combined scatterplots of children and parent heights
@@ -143,7 +145,7 @@ xyplot(child ~ parent|par+chl, data=PearsonLee, type=c("p", "r", "smooth"), col.
 Histogram of Children Heights
 
 ```{r echo=FALSE}
-# By making a histogram of our data distribution for children heights we can validate that the distribution is normal or not.
+# By making a histogram of our data distribution for children heights we can validate that the distribution is approximately normal or not.
 # Include input for selection of bin numbers:
 inputPanel(
   selectInput("n_breaks", label = "Number of bins:",
@@ -161,7 +163,7 @@ renderPlot({h<-hist(child, probability = FALSE, breaks = as.numeric(input$n_brea
 Histogram of Parent Heights 
 
 ```{r echo=FALSE}
-# By making a histogram of our data distribution for parent heights we can validate that the distribution is normal or not.
+# By making a histogram of our data distribution for parent heights we can validate that the distribution is approximately normal or not.
 # Include input for selection of bin numbers:
 inputPanel(
   selectInput("n_breaks", label = "Number of bins:",
@@ -173,6 +175,7 @@ renderPlot({hist(parent, probability = FALSE, breaks = as.numeric(input$n_breaks
             xlab = "Parent's Heights", main = "Histogram of Parent's Heights", col="deepskyblue", plot = TRUE)
 
          })
+# Both histograms look approximately normal.
 ```
 
 
@@ -183,20 +186,20 @@ Boxplot of Children and Parent Heights
 # Boxplot of children's heights by gender
 par(mfrow=c(1,2))
 boxplot(child~chl, data=PearsonLee, main="Boxplot of Children's Height",
-xlab="Children", ylab="Children's Height", col=c('powderblue','mistyrose'))
+xlab="Children", ylab="Children's Height", col=c('mistyrose','powderblue'))
 
 # Boxplot of parent's heights by gender
 boxplot(parent~par, data=PearsonLee, main="Boxplot of Parent's Height",
-xlab="Parent", ylab="Parent's Height", col=c('mistyrose','powderblue'))
+xlab="Parent", ylab="Parent's Height", col=c('powderblue','mistyrose'))
 ```
 
 ## Null and Alternative Hypotheses
 <ul>
-<li>Null Hypothesis: The means of the average heights for the 2 groups are equal (same gender, different gender)</li>
+<li>Null Hypothesis: The means of the average heights for the 2 groups (same gender, different gender) are equal </li>
 <li>Alternative Hypothesis: The means of the average heights for the 2 groups are <u>not</u> equal</li>
 </ul>
 
-## Taking a t.test (Results/Interpretations)
+## Results/Interpretations (t test)
 
 ```{r echo=FALSE}
 layout(matrix(c(1,2,2,3), 2, 2, byrow = TRUE), heights=c(2,1))
@@ -208,6 +211,8 @@ boxplot(avg~group, data=PearsonLee, names=c("Same Gender", "Different Gender"),m
 xlab="Group", ylab="Height", col = c('grey79','grey37'))
 
 # After taking a t test, we were able to see that the means of the different groups are definitely not equal. Therefore, we can reject our null hypothesis and accept the alternative. 
+
+#With the boxplot, we see that the means are not exactly the same, and further, we see there is a much greater spread with the "Same Gender" group.
 
 # The means of the average of parent and children heights DO differ when parent and child differ by gender based on our analysis. 
 ```
