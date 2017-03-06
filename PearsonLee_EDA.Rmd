@@ -5,7 +5,7 @@ author: "Amelia Kelly & Matt Wilchek"
 date: "March 6, 2017"
 output:
   ioslides_presentation:
-    font-family: Centruy Gothic
+    css: bulma.css
     widescreen: true
     transition: slower
     smaller: true
@@ -20,6 +20,7 @@ library(car) # for graphing
 library(memisc) # for function case
 library(HistData) # library containing data
 library(grid) # for graphing
+library(rsconnect)
 
 # Call data set
 PearsonLeeData <- (HistData::PearsonLee) 
@@ -40,7 +41,7 @@ PearsonLee$gp == 'ms' -> 1
 # Create column variable as average of height columns
 PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 ```
-
+ 
 ## Overview
 - Goal
 - Background of Dataset
@@ -55,6 +56,7 @@ PearsonLee$avg <- (PearsonLee$child + PearsonLee$parent)/2
 - Results/Interpretations (t test)
 - Conclusions and Next Steps
 - References
+
 
 ## Goal (About)
 
