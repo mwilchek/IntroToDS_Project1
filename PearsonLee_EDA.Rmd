@@ -235,5 +235,10 @@ xlab="Group", ylab="Height", col = c('grey79','grey37'))
 <p></p>
 <p>For future next steps with this dataset it may be interesting if We consider further stratifying the data to look for differences among different height groups.</p>
 
+## Research Paper
+<p> For additional information on this exploratory analysis and an in depth research paper, <a href="https://github.com/mwilchek/IntroToDS_Project1/raw/master/ResearchPaper.pdf">click here</a>.</p>
+<p></p>
+<p>For additional information how this R Shiny web application was made, all code can be found <a href="https://github.com/mwilchek/IntroToDS_Project1/blob/master/PearsonLee_EDA.Rmd">here</a>.</p>
+
 ## References
 <div><p style="float: center;"><img src='https://raw.githubusercontent.com/mwilchek/IntroToDS_Project1/master/Refs.jpg' width="516px", height="467px"></p></div>
