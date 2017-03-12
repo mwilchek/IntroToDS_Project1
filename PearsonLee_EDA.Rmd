@@ -26,7 +26,7 @@ library(HistData) # library containing data
 library(grid) # for graphing
 library(rsconnect)
 
-# Call data set
+# Call data set change
 PearsonLeeData <- (HistData::PearsonLee) 
 PearsonLee <- data.frame(PearsonLeeData)
 
